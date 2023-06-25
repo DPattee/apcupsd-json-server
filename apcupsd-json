@@ -41,8 +41,8 @@ def fetch_ups_data():
 
   for w in args.watch:
     if type(w) is str and ":" in w:
-      h, p = w.split(":")
-      sock = (h, int(p))
+      host, port = w.split(":")
+      sock = (host, int(port))
     else:
       sock = ("127.0.0.1", int(w))
 
@@ -59,10 +59,10 @@ def fetch_ups_data():
       print "caught exception from format: %s" % err
       raise RuntimeError, "couldn't format response from apcupsd: %s" % err
 
-  return {
-    "status": u"\ud83d\udc4d",
-    "upses": upses
-  }
+  return upses #{
+#    "status": u"success_status",
+#    "upses": upses
+#  }
 
 class RequestHandler(SimpleHTTPRequestHandler):
   def do_GET(self):
@@ -78,7 +78,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
       }
       self.send_response(codes[type(err).__name__])
       response = {
-        "status": u"\ud83d\udc4e",
+        "status": u"failure_status",
         "error": "%s" % err
       }
     finally:
